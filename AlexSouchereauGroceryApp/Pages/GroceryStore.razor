@@ -1,6 +1,50 @@
 ﻿@page "/grocerystore"
-<h3>Grocery Store</h3>
+
+@using AlexSouchereauGroceryApp.Data
+
+<h1>Grocery Store</h1>
+
+@if (groceryIsles == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Isle Number</th>
+                <th>Isle Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var isle in groceryIsles)
+            {
+                <tr>
+                    <td>@isle.IsleNumber</td>
+                    <td>@isle.IsleName</td>
+                </tr>
+                <tr>
+                    <th>Quantity</th>
+                    <th>Food Name</th>
+                    <th>Food Group</th>
+                    <th>Price</th>
+                </tr>
+                @foreach (var food in foodItems)
+                {
+                    <tr>
+                        <td>@food.Quantity</td>
+                        <td>@food.FoodName</td>
+                        <td>@food.FoodGroup</td>
+                        <td>@food.Price</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
 
 @code {
-
+private GroceryIsle[] groceryIsles;
+private FoodItem[] foodItems;
 }
