@@ -48,3 +48,12 @@ a, .btn-link {
         right: 0.75rem;
         top: 0.5rem;
     }
+    
+.isle-table-head {
+    font-size: 1.5em;
+}
+
+.food-table-head {
+    font-size: 1.15em;
+    color: dimgrey;
+}

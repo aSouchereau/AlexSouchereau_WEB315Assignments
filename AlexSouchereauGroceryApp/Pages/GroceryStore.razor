@@ -10,39 +10,42 @@
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Isle Number</th>
-                <th>Isle Name</th>
-            </tr>
-        </thead>
-        <tbody>
+
+
             @foreach (var isle in GroceryIsles)
             {
-                <tr>
-                    <td>@isle.IsleNumber</td>
-                    <td>@isle.IsleName</td>
-                </tr>
-                <tr>
-                    <th>Quantity</th>
-                    <th>Food Name</th>
-                    <th>Food Group</th>
-                    <th>Price</th>
-                </tr>
-                @foreach (var food in isle.StockedFood)
-                {
+                <table class="table">
+                    <thead class="isle-table-head">
+                        <tr>
+                            <th>Isle Number</th>
+                            <th>Isle Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                     <tr>
-                        <td>@food.Quantity</td>
-                        <td>@food.FoodName</td>
-                        <td>@food.FoodGroup</td>
-                        <td>@food.Price</td>
+                        <td>@isle.IsleNumber</td>
+                        <td>@isle.IsleName</td>
                     </tr>
-                }
-                <br /><br />
+                    <tr class="food-table-head">
+                        <th>Quantity</th>
+                        <th>Food Name</th>
+                        <th>Food Group</th>
+                        <th>Price</th>
+                    </tr>
+                    @foreach (var food in isle.StockedFood)
+                    {
+                        <tr>
+                            <td>@food.Quantity</td>
+                            <td>@food.FoodName</td>
+                            <td>@food.FoodGroup</td>
+                            <td>@food.Price</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+                <br /><br /><br /><br />             
             }
-        </tbody>
-    </table>
+
 }
 
 @code {
