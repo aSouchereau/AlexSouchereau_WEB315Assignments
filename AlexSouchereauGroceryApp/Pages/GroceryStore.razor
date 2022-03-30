@@ -30,7 +30,7 @@ else
                     <th>Food Group</th>
                     <th>Price</th>
                 </tr>
-                @* @foreach (var food in foodItems)
+                @foreach (var food in isle.StockedFood)
                 {
                     <tr>
                         <td>@food.Quantity</td>
@@ -38,18 +38,46 @@ else
                         <td>@food.FoodGroup</td>
                         <td>@food.Price</td>
                     </tr>
-                } *@
+                }
+                <br /><br />
             }
         </tbody>
     </table>
 }
 
 @code {
-private FoodItem[] foodItems;
+@* private FoodItem[] foodItems; *@
 
 public List<GroceryIsle> GroceryIsles = new List<GroceryIsle> {
-    new GroceryIsle { StockedFood = null, IsleName = "Non-Perishables", IsleNumber = 1 },
-    new GroceryIsle { StockedFood = null, IsleName = "Frozen Goods", IsleNumber = 2 },
-    new GroceryIsle { StockedFood = null, IsleName = "Snacks", IsleNumber = 3 }
+    new GroceryIsle
+    {
+        IsleName = "Non-Perishables",
+        IsleNumber = 1,
+        StockedFood = new List<FoodItem>
+        {
+            new FoodItem { Quantity = 15, FoodName = "Canned Corn", FoodGroup = "Vegetables", Price = 2.49M },
+            new FoodItem { Quantity = 12, FoodName = "Black Beans", FoodGroup = "Vegetables", Price = 1.99M }
+        } 
+    },
+    new GroceryIsle
+    {
+        IsleName = "Frozen Goods",
+        IsleNumber = 2,
+        StockedFood = new List<FoodItem>
+        {
+            new FoodItem { Quantity = 2, FoodName = "Chicken Strips", FoodGroup = "Meats", Price = 10.99M },
+            new FoodItem { Quantity = 5, FoodName = "Cheddar Perogies", FoodGroup = "Dairy", Price = 5.49M }
+        }
+    },
+    new GroceryIsle
+    {
+        IsleName = "Snacks",
+        IsleNumber = 3,
+        StockedFood = new List<FoodItem>
+        {
+            new FoodItem { Quantity = 7, FoodName = "Crackers", FoodGroup = "Grains", Price = 3.99M },
+            new FoodItem { Quantity = 9, FoodName = "Rasins", FoodGroup = "Fruits", Price = 2.99M }
+        }
+    }
 };
 }
