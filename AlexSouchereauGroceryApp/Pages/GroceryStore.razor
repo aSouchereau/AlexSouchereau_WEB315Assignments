@@ -4,7 +4,7 @@
 
 <h1>Grocery Store</h1>
 
-@if (groceryIsles == null)
+@if (GroceryIsles == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -18,7 +18,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var isle in groceryIsles)
+            @foreach (var isle in GroceryIsles)
             {
                 <tr>
                     <td>@isle.IsleNumber</td>
@@ -30,7 +30,7 @@ else
                     <th>Food Group</th>
                     <th>Price</th>
                 </tr>
-                @foreach (var food in foodItems)
+                @* @foreach (var food in foodItems)
                 {
                     <tr>
                         <td>@food.Quantity</td>
@@ -38,13 +38,18 @@ else
                         <td>@food.FoodGroup</td>
                         <td>@food.Price</td>
                     </tr>
-                }
+                } *@
             }
         </tbody>
     </table>
 }
 
 @code {
-private GroceryIsle[] groceryIsles;
 private FoodItem[] foodItems;
+
+public List<GroceryIsle> GroceryIsles = new List<GroceryIsle> {
+    new GroceryIsle { StockedFood = null, IsleName = "Non-Perishables", IsleNumber = 1 },
+    new GroceryIsle { StockedFood = null, IsleName = "Frozen Goods", IsleNumber = 2 },
+    new GroceryIsle { StockedFood = null, IsleName = "Snacks", IsleNumber = 3 }
+};
 }
