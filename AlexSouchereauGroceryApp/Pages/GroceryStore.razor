@@ -4,52 +4,71 @@
 
 <h1>Grocery Store</h1>
 
-@if (GroceryIsles == null)
+
+@foreach (var isle in GroceryIsles)
 {
-    <p><em>Loading...</em></p>
-}
-else
-{
-
-
-            @foreach (var isle in GroceryIsles)
-            {
-                <table class="table">
-                    <thead class="isle-table-head">
-                        <tr>
-                            <th>Isle Number</th>
-                            <th>Isle Name</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>@isle.IsleNumber</td>
-                        <td>@isle.IsleName</td>
-                    </tr>
-                    <tr class="food-table-head">
-                        <th>Quantity</th>
-                        <th>Food Name</th>
-                        <th>Food Group</th>
-                        <th>Price</th>
-                    </tr>
-                    @foreach (var food in isle.StockedFood)
-                    {
-                        <tr>
-                            <td>@food.Quantity</td>
-                            <td>@food.FoodName</td>
-                            <td>@food.FoodGroup</td>
-                            <td>@food.Price</td>
-                        </tr>
-                    }
-                    </tbody>
-                </table>
-                <br /><br /><br /><br />             
-            }
-
+    <table class="table">
+        <thead class="isle-table-head">
+            <tr>
+                <th>Isle Number</th>
+                <th>Isle Name</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>@isle.IsleNumber</td>
+            <td>@isle.IsleName</td>
+        </tr>
+        <tr class="food-table-head">
+            <th>Quantity</th>
+            <th>Food Name</th>
+            <th>Food Group</th>
+            <th>Price/Unit</th>
+        </tr>
+        @foreach (var food in isle.StockedFood)
+        {
+            <tr>
+                <td>@food.Quantity
+                    <button class="btn btn-outline-secondary btn-sm" @onclick='(() => QtyIncrease(food))'>&#129053;</button>
+                    <button class="btn btn-outline-secondary btn-sm" @onclick='(() => QtyDecrease(food))'>&#129055;</button>
+                </td>
+                <td>@food.FoodName</td>
+                <td>@food.FoodGroup</td>
+                <td>@food.Price</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <br /><br /><br /><br />
 }
 
 @code {
 @* private FoodItem[] foodItems; *@
+
+private void QtyIncrease(FoodItem food)
+{
+    if(food.Quantity < 20)
+    {
+       food.Quantity += 1;
+    }
+    else
+    {
+        food.Quantity += 0;
+    }
+    
+}
+private void QtyDecrease(FoodItem food)
+{
+    if(food.Quantity > 0)
+    {
+        food.Quantity -= 1;    
+    }
+    else
+    {
+        food.Quantity -= 0;
+    }
+
+}
 
 public List<GroceryIsle> GroceryIsles = new List<GroceryIsle> {
     new GroceryIsle
