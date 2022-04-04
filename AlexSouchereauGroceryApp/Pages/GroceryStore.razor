@@ -20,9 +20,7 @@
     <button class="btn btn-primary btn-sm" @onclick="addFoodItem">Add Food Item</button>
 </form>
 
-
-
-
+<br /><br />
 
 @* Display Lists *@
 @foreach (var isle in GroceryIsles)
@@ -102,7 +100,6 @@ private int newFoodQuantity;
 private string newFoodName;
 private string newFoodGroup;
 private decimal newFoodPrice;
-private int[] availableIsles = { 2, 5, 9 };
 
 private void addFoodItem()
 {
@@ -116,9 +113,11 @@ private void addFoodItem()
         Price = newFoodPrice
     };
 
-    GroceryIsles.Where(w => w.IsleNumber == newIsleNumber).ToList().ForEach(s => s.StockedFood.Add(newFoodItem));
+    if(newFoodQuantity < 20 && newFoodQuantity > 0)
+    {
+    GroceryIsles.Where(w => w.IsleNumber == newIsleNumber).ToList().ForEach(s => s.StockedFood.Add(newFoodItem));        
+    }
 
-    @* GroceryIsles.Find(x => x.IsleNumber == newIsleNumber ); *@
 }
 
 
