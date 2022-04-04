@@ -4,7 +4,27 @@
 
 <h1>Grocery Store</h1>
 
+<h4>Add Food Item</h4>
 
+<form>
+    <label for="IsleNumber">Isle Number:</label>
+    <input type="number" id="IsleNumber" placeholder="Enter Isle Number" @bind="newIsleNumber"><br />
+    <label for="Quantity">Quantity:</label>
+    <input type="number" id="Quantity" placeholder="Enter Quantity" @bind="newFoodQuantity"><br />
+    <label for="FoodName">Food Name:</label>
+    <input type="text" id="FoodName" placeholder="Enter Food Name" @bind="newFoodName"><br />
+    <label for="FoodGroup">Food Group:</label>
+    <input type="text" id="FoodGroup" placeholder="Enter Food Group" @bind="newFoodGroup"><br />
+    <label for="Price">Price:</label>
+    <input type="number" id="Price" placeholder="Enter Price" @bind="newFoodPrice"><br />
+    <button class="btn btn-primary btn-sm" @onclick="addFoodItem">Add Food Item</button>
+</form>
+
+
+
+
+
+@* Display Lists *@
 @foreach (var isle in GroceryIsles)
 {
     <table class="table">
@@ -29,8 +49,8 @@
         {
             <tr>
                 <td>@food.Quantity
-                    <button class="btn btn-outline-secondary btn-sm" @onclick='(() => QtyIncrease(food))'>&#129053;</button>
                     <button class="btn btn-outline-secondary btn-sm" @onclick='(() => QtyDecrease(food))'>&#129055;</button>
+                    <button class="btn btn-outline-secondary btn-sm" @onclick='(() => QtyIncrease(food))'>&#129053;</button>
                 </td>
                 <td>@food.FoodName</td>
                 <td>@food.FoodGroup</td>
@@ -45,6 +65,9 @@
 @code {
 @* private FoodItem[] foodItems; *@
 
+
+
+// Increase Food Item Quantity Button
 private void QtyIncrease(FoodItem food)
 {
     if(food.Quantity < 20)
@@ -57,6 +80,8 @@ private void QtyIncrease(FoodItem food)
     }
     
 }
+
+// Decrease Food Item Quantity Button
 private void QtyDecrease(FoodItem food)
 {
     if(food.Quantity > 0)
@@ -70,11 +95,39 @@ private void QtyDecrease(FoodItem food)
 
 }
 
+// Adds a new food item to an isle
+
+private int newIsleNumber;
+private int newFoodQuantity;
+private string newFoodName;
+private string newFoodGroup;
+private decimal newFoodPrice;
+private int[] availableIsles = { 2, 5, 9 };
+
+private void addFoodItem()
+{
+    FoodItem newFoodItem;
+
+    newFoodItem = new FoodItem
+    {
+        Quantity = newFoodQuantity,
+        FoodName = newFoodName,
+        FoodGroup = newFoodGroup,
+        Price = newFoodPrice
+    };
+
+    GroceryIsles.Where(w => w.IsleNumber == newIsleNumber).ToList().ForEach(s => s.StockedFood.Add(newFoodItem));
+
+    @* GroceryIsles.Find(x => x.IsleNumber == newIsleNumber ); *@
+}
+
+
+// Default values for lists
 public List<GroceryIsle> GroceryIsles = new List<GroceryIsle> {
     new GroceryIsle
     {
         IsleName = "Non-Perishables",
-        IsleNumber = 1,
+        IsleNumber = 2,
         StockedFood = new List<FoodItem>
         {
             new FoodItem { Quantity = 15, FoodName = "Canned Corn", FoodGroup = "Vegetables", Price = 2.49M },
@@ -84,7 +137,7 @@ public List<GroceryIsle> GroceryIsles = new List<GroceryIsle> {
     new GroceryIsle
     {
         IsleName = "Frozen Goods",
-        IsleNumber = 2,
+        IsleNumber = 5,
         StockedFood = new List<FoodItem>
         {
             new FoodItem { Quantity = 2, FoodName = "Chicken Strips", FoodGroup = "Meats", Price = 10.99M },
@@ -94,7 +147,7 @@ public List<GroceryIsle> GroceryIsles = new List<GroceryIsle> {
     new GroceryIsle
     {
         IsleName = "Snacks",
-        IsleNumber = 3,
+        IsleNumber = 9,
         StockedFood = new List<FoodItem>
         {
             new FoodItem { Quantity = 7, FoodName = "Crackers", FoodGroup = "Grains", Price = 3.99M },
