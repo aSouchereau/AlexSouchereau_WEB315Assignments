@@ -3,34 +3,43 @@
 @inject NavigationManager NavigationManager
 @implements IAsyncDisposable
 
-<div class="form-group">
-    <label>
-        User:
-        <input @bind="userInput" />
-    </label>
-</div>
-<div class="form-group">
-    <label>
-        Message:
-        <input @bind="messageInput" size="50" />
-    </label>
-</div>
-<button @onclick="Send" disabled="@(!IsConnected)">Send</button>
+    <h3>Chat</h3>
+    <div class="form-group">
+        <label>
+            Name:
+            <input @bind="nameInput" />
+        </label>
+    </div>
+    <div class="form-group">
+        <label>
+            Message:
+            <input @bind="messageInput" @onfocus="SendTypeIndicator" @onblur="SendRemoveTypeIndicator" size="50" />
+        </label>
+    </div>
+    <button @onclick="Send" disabled="@(!IsConnected)">Send</button>
+    @if (userTyping != nameInput)
+    {
+        @typingIndicator
+    }
+    <hr>
 
-<hr>
 
-<ul id="messagesList">
+
+<div id="messagesList">
     @foreach (var message in messages)
     {
-        <li>@message</li>
+        <span>@message</span>
+        <hr />
     }
-</ul>
+</div>
 
 @code {
     private HubConnection hubConnection;
     private List<string> messages = new List<string>();
-    private string userInput;
+    private string nameInput;
     private string messageInput;
+    private string typingIndicator;
+    private string userTyping;
 
     protected override async Task OnInitializedAsync()
     {
@@ -38,18 +47,46 @@
             .WithUrl(NavigationManager.ToAbsoluteUri("/chathub"))
             .Build();
 
-        hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
+        hubConnection.On<string, string>("ReceiveMessage", (name, message) =>
         {
-            var encodedMsg = $"{user}: {message}";
+            var encodedMsg = $"{name}: {message}";
             messages.Add(encodedMsg);
             StateHasChanged();
+        });
+
+        hubConnection.On<string>("ReceiveTypeIndicator", (name) =>
+        {
+            typingIndicator = $"{name} is typing...";
+            userTyping = name;
+            StateHasChanged();
+        });
+        hubConnection.On<string>("ReceiveRemoveTypeIndicator", (name) =>
+        {
+            if (userTyping != nameInput)
+            {
+                typingIndicator = "";
+                StateHasChanged();                
+            }
         });
 
         await hubConnection.StartAsync();
     }
 
-    async Task Send() =>
-        await hubConnection.SendAsync("SendMessage", userInput, messageInput);
+
+    async Task SendTypeIndicator() =>
+        await hubConnection.SendAsync("SendTypeIndicator", nameInput);
+
+    async Task SendRemoveTypeIndicator() =>
+        await hubConnection.SendAsync("SendRemoveTypeIndicator", nameInput);
+
+    
+
+    async Task Send()
+    {
+        await hubConnection.SendAsync("SendMessage", nameInput, messageInput);
+        messageInput = "";       
+    }
+
 
     public bool IsConnected =>
         hubConnection.State == HubConnectionState.Connected;
