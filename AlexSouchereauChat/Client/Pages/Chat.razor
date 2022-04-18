@@ -1,5 +1,6 @@
 ﻿@page "/chat"
 @using Microsoft.AspNetCore.SignalR.Client
+@using AlexSouchereauChat.Models
 @inject NavigationManager NavigationManager
 @implements IAsyncDisposable
 
@@ -19,7 +20,7 @@
     <button @onclick="Send" disabled="@(!IsConnected)">Send</button>
     @if (userTyping != nameInput)
     {
-        @typingIndicator
+        <span>&nbsp;</span> @typingIndicator
     }
     <hr>
 
@@ -28,14 +29,16 @@
 <div id="messagesList">
     @foreach (var message in messages)
     {
-        <span>@message</span>
-        <hr />
+        <div class='@(message.CurrentUser ? "chat-bubble-currentuser" : "chat-bubble")'>
+            <span class='@(message.CurrentUser ? "chat-name-currentuser" : "chat-name")'>@message.NameInput</span>
+            <span class='@(message.CurrentUser ? "chat-message-currentuser" : "chat-message")'>@message.MessageInput</span>
+        </div>
     }
 </div>
 
 @code {
     private HubConnection hubConnection;
-    private List<string> messages = new List<string>();
+    private List<Message> messages = new List<Message>();
     private string nameInput;
     private string messageInput;
     private string typingIndicator;
@@ -49,8 +52,15 @@
 
         hubConnection.On<string, string>("ReceiveMessage", (name, message) =>
         {
-            var encodedMsg = $"{name}: {message}";
-            messages.Add(encodedMsg);
+            Message newMessage;
+
+            newMessage = new Message
+            {
+                NameInput = name,
+                MessageInput = message,
+                CurrentUser = name == nameInput
+            };
+            messages.Add(newMessage);
             StateHasChanged();
         });
 
@@ -62,11 +72,8 @@
         });
         hubConnection.On<string>("ReceiveRemoveTypeIndicator", (name) =>
         {
-            if (userTyping != nameInput)
-            {
-                typingIndicator = "";
-                StateHasChanged();                
-            }
+            typingIndicator = "";
+            StateHasChanged();
         });
 
         await hubConnection.StartAsync();

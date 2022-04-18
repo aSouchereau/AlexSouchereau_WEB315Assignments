@@ -1,0 +1,45 @@
+.chat-bubble {
+    width: 25%;
+    margin: 15px 0;
+}
+.chat-bubble-currentuser {
+    width: 25%;
+    margin: 15px 0;
+    margin-right: 0;
+    margin-left: auto;
+    justify-content: right;
+}
+
+.chat-name {
+    display: block;
+    margin-bottom: 3px;
+    font-size: 0.8em;
+}
+.chat-name-currentuser {
+    display: block;
+    margin-bottom: 3px;
+    font-size: 0.8em;
+    text-align: right;
+}
+
+.chat-message {
+    display: block;
+    padding: 0.5em 1em;
+    width: 100%;
+    background-color: lightgrey;
+    border-radius: 15px;
+    font-size: 1em;
+}
+
+.chat-message-currentuser {
+    display: block;
+    padding: 0.5em 1em;
+    margin-right: 0;
+    width: 100%;
+    background: linear-gradient(135deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+    background-size: cover;
+    background-position: center;
+    color: white;
+    border-radius: 15px;
+    font-size: 1em;
+}
